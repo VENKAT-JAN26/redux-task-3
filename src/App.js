@@ -1,23 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { fetchProducts } from './actions/fetchapiaction';
+const App=()=>{
+  const products= useSelector((state) => state.user.items);
+  const error = useSelector(state => state.user.error);
+  const dispatch = useDispatch();
 
-function App() {
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+     <h1>Hi</h1>
+  
+    <div className="product-list">
+    { products !== undefined && products.map((product,index) => (
+      <div key={index}>
+            <h2>{product.name}</h2>
+              <div>
+                <p>Color: {product.data?.color || 'N/A'}</p>
+                <p>Capacity: {product.data?.capacity || 'N/A'}</p>
+              </div>
+       </div>
+    ))
+    
+    }
+
+    </div>
+
     </div>
   );
 }
